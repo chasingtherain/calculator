@@ -1,5 +1,5 @@
 # calculator
-a deceptively "easy" app that we use daily, created with vanilla JS
+a simple looking app that we use in our daily life, created with vanilla JS
 
 #pseudocode
 
