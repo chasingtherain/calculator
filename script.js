@@ -9,8 +9,9 @@ const dotBtn = document.getElementById("dot")
 let operatorSelected = false;
 let prevNumber = 0;
 let currentNumber = "";
-let operatorCount = 0;
+let operatorCount = 0; // to apply logic based on no. of times operator has been selected
 let dotCount = 0; // prevent user from typing consecutive decimal places
+let equalCount = 0;
 
 // main interfaces
 let bigDisplay = document.getElementById("big-display")
@@ -38,7 +39,6 @@ function divide(a,b){
 }
 
 function operate(operator,a,b){
-    console.log("function triggered")
     let result = null;
     switch(operator)
     {
@@ -69,8 +69,9 @@ numberBtn.forEach(
         keyPress = button.target.textContent;
         updateBigDisplay(keyPress)
         // console.log(keyPress)
-        console.log("prev number: " + prevNumber)
-        console.log("curr number: " + currentNumber)
+        // console.log("prev number: " + prevNumber)
+        // console.log("curr number: " + currentNumber)
+        equalCount = 0;
     })
 )
 
@@ -100,8 +101,33 @@ operatorBtn.forEach(
     // add event listener for keydown
     window.addEventListener("keydown", (event)=>{
             key = event.key;
+            // console.log(event)
+            console.log(key)
             if (key/1 == key){
-                console.log(key)
+                updateBigDisplay(key)
+                equalCount = 0;
+            }
+            if (key == "Backspace"){
+                deleteNum();
+            }
+            if (key == "Escape"){
+                clearScreen();
+            }
+            if (key == "Enter"){
+                evaluateOutput();
+                "enter selected"
+            }
+            if (key == "/"){
+                operandUpdate("÷")
+            }
+            if (key == "+" || key == "-"){
+                operandUpdate(key)
+            }
+            if (key == "/"){
+                operandUpdate("÷")
+            }
+            if(event.shiftKey && key == "*"){
+                operandUpdate("×")
             }
         })
     
@@ -166,10 +192,11 @@ function clearScreen(){
     bigDisplay.textContent = "0";
     smallDisplay.textContent = "";
     operatorCount=0;
+    equalCount = 0;
 }
 
 function evaluateOutput(){
-    if(prevNumber != currentNumber){
+    if(equalCount == 0){
         output = operate(operator, prevNumber, currentNumber)
         let fixedOutput;
         if (output % 1 != 0){
@@ -182,8 +209,7 @@ function evaluateOutput(){
         currentNumber = fixedOutput;
         prevNumber = fixedOutput;
         updateSmallDisplay(prevNumber,operator)
-        console.log(currentNumber)
-        console.log(fixedOutput)
+        equalCount += 1;
     }
 }
 
